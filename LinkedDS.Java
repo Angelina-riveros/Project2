@@ -35,25 +35,28 @@ public class LinkedDS<T> implements SequenceInterface<T> {
 			firstItem = item;
 			lastItem = item;
 		}else{
-			int lastItemPlace = -1;
+			int firstItemPlace = -1;
 			for(int i =0; i < alphabet.length; i++){
-				if(alphabet[i].equals(lastItem)){
-					lastItemPlace = i;
+				if(alphabet[i].equals(firstItem)){
+					firstItemPlace = i;
 					break;
 				}
 			}
 			Node newNode = new Node(place);
-			if (array[lastItemPlace] == null){
-				array[lastItemPlace] = newNode;
-			}else{
-				Node temp = array[lastItemPlace];
-				while(temp.next != null){
-					temp = temp.next;
-				}
-				temp.next = newNode;
-			}
-			lastItem = item;
-		}
+		//	if (array[firstItemPlace] == null){
+		//		array[firstItemPlace] = newNode;
+		//	}else{
+		//		Node temp = array[firstItemPlace];
+		//		while(temp.next != null){
+		//			temp = temp.next;
+		//		}
+		//		temp.next = newNode;
+		//	}
+		//	lastItem = item;
+			newNode.next = array[firstItemPlace];
+			array[firstItemPlace]=newNode;
+			firstItem = item;
+					}
 		size++;
 	}
 
@@ -79,8 +82,19 @@ public class LinkedDS<T> implements SequenceInterface<T> {
 				}
 			}
 			Node firstNode = array[firstItemPlace];
-			firstItem = alphabet[firstNode.item];
 			array[firstItemPlace] = firstNode.next;
+			if (array[firstItemPlace] != null) {
+				firstItem = alphabet[array[firstItemPlace].item];
+			} else {
+				// Find the new first item by checking all lists
+				firstItem = null;
+				for (int i = 0; i < alphabet.length; i++) {
+					if (array[i] != null) {
+						firstItem = alphabet[i];
+						break;
+					}
+				}
+			}
 		}
 		size--;
 		return temp;
@@ -225,7 +239,7 @@ public class LinkedDS<T> implements SequenceInterface<T> {
 			current = current.next;
 		}
 		@SuppressWarnings("unchecked")
-			T[] successors = (T[]) new Object[hasNextCount];
+		T[] successors = (T[]) new Object[hasNextCount];
 		int successorIndex = 0;
 		for(int i =0; i < alphabet.length; i++){
 			if(hasNext[i]){
